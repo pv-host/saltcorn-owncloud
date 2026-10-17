@@ -11,7 +11,7 @@ let passed = 0;
 const t = async (name, fn) => { await fn(); passed++; console.log("  ok -", name); };
 
 (async () => {
-  const PORT = 18080;
+  const PORT = Number(process.env.OC_TEST_PORT || 18180);
   const mock = await start(PORT);
   const cfg = { base_url: `http://localhost:${PORT}`, username: "svc", password: "app-pw", root_folder: "Saltcorn" };
   const c = new OwnCloudClient(cfg);
@@ -153,8 +153,8 @@ const t = async (name, fn) => { await fn(); passed++; console.log("  ok -", name
       await vt.routes.download(1, "v", viewCfg, { id: 5, path: "Antrag/Antrag.pdf", inline: "1" }, { req: reqStaff, res });
       assert(res.headersSent);
     });
-    await new Promise((r) => srv.listen(18081, r));
-    const r = await fetch("http://localhost:18081/");
+    await new Promise((r) => srv.listen(PORT + 1, r));
+    const r = await fetch(`http://localhost:${PORT + 1}/`);
     assert.strictEqual(await r.text(), "%PDF-1.4 test");
     assert(r.headers.get("content-disposition").startsWith("inline;"));
     assert.strictEqual(r.headers.get("content-security-policy"), "sandbox");
@@ -165,8 +165,8 @@ const t = async (name, fn) => { await fn(); passed++; console.log("  ok -", name
     const srv = http.createServer(async (req, res) => {
       await vt.routes.download(1, "v", viewCfg, { id: 5, path: "x.html", inline: "1" }, { req: reqStaff, res });
     });
-    await new Promise((r) => srv.listen(18082, r));
-    const r = await fetch("http://localhost:18082/");
+    await new Promise((r) => srv.listen(PORT + 2, r));
+    const r = await fetch(`http://localhost:${PORT + 2}/`);
     assert(r.headers.get("content-disposition").startsWith("attachment;"));
     srv.close();
   });

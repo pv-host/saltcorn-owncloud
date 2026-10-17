@@ -254,17 +254,18 @@ const makeViewTemplate = (pluginCfg) => {
         { id: uid, class: "owncloud-files", "data-sc-embed-viewname": viewname },
         div(
           { class: "d-flex align-items-center gap-2 mb-2 flex-wrap" },
-          `<nav aria-label="Pfad" class="me-auto"><ol class="breadcrumb mb-0 oc-crumbs"></ol></nav>`,
-          p.write
-            ? `<button type="button" class="btn btn-sm btn-outline-secondary oc-mkdir"><i class="fas fa-folder-plus"></i> Ordner</button>
-               <label class="btn btn-sm btn-primary mb-0"><i class="fas fa-upload"></i> Hochladen
-                 <input type="file" class="d-none oc-file" multiple></label>`
-            : "",
-          `<button type="button" class="btn btn-sm btn-outline-secondary oc-reload" title="Aktualisieren"><i class="fas fa-sync-alt"></i></button>`
+          `<nav aria-label="Pfad" class="me-auto"><ol class="breadcrumb mb-0 p-0 bg-transparent oc-crumbs"></ol></nav>`,
+          `<div class="d-flex gap-2 flex-nowrap">` +
+            (p.write
+              ? `<button type="button" class="btn btn-sm btn-outline-secondary oc-mkdir"><i class="fas fa-folder-plus"></i> Ordner</button>` +
+                `<label class="btn btn-sm btn-primary mb-0"><i class="fas fa-upload"></i> Hochladen<input type="file" class="d-none oc-file" multiple></label>`
+              : "") +
+            `<button type="button" class="btn btn-sm btn-outline-secondary oc-reload" title="Aktualisieren" aria-label="Aktualisieren"><i class="fas fa-sync-alt"></i></button>` +
+            `</div>`
         ),
         p.write
           ? div(
-              { class: "oc-drop border border-2 rounded p-2 mb-2 text-center text-muted small" },
+              { class: "oc-drop border border-2 rounded p-2 mb-2 text-center text-muted small", style: "border-style:dashed !important" },
               "Dateien hierher ziehen"
             )
           : "",

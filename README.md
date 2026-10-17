@@ -38,13 +38,21 @@ Eine Antwort `207 Multi-Status` bzw. `"statuscode":100` bedeutet, dass die Verbi
 
 ## 2. Plugin installieren
 
+### Variante A: aus npm (empfohlen)
+
+In Saltcorn unter **Einstellungen > Module > Hinzufügen**:
+
+- Name: `saltcorn-owncloud`
+- Quelle: `npm`
+
+### Variante B: lokal vom Server
+
 ```bash
-# auf dem Saltcorn-Server, als der Benutzer, unter dem Saltcorn läuft
 sudo mkdir -p /opt/saltcorn-plugins
 sudo cp -r saltcorn-owncloud /opt/saltcorn-plugins/
-cd /opt/saltcorn-plugins/saltcorn-owncloud
-npm install --omit=dev        # installiert fast-xml-parser
 ```
+
+Kein `npm install` im Plugin-Ordner ausführen. Saltcorn kopiert das Plugin selbst und installiert die Abhängigkeit `fast-xml-parser`.
 
 In Saltcorn unter **Einstellungen > Module > Hinzufügen**:
 
@@ -52,7 +60,9 @@ In Saltcorn unter **Einstellungen > Module > Hinzufügen**:
 - Quelle: `local`
 - Ort: `/opt/saltcorn-plugins/saltcorn-owncloud`
 
-Danach beim Modul auf **Konfigurieren** klicken:
+### Konfiguration
+
+Beim Modul auf **Konfigurieren** klicken:
 
 | Feld | Beispiel |
 |---|---|
@@ -61,7 +71,11 @@ Danach beim Modul auf **Konfigurieren** klicken:
 | App-Passwort | … |
 | Basisordner | `Saltcorn` |
 
-Nach Code-Änderungen am Plugin Saltcorn neu starten (`systemctl restart saltcorn`).
+### Fehlerbehebung: „Unknown type String in field base_url“
+
+Diese Meldung kam in Version 0.1.0. Dort waren `@saltcorn/data` und `@saltcorn/markup` als `peerDependencies` eingetragen, und npm ab Version 7 installiert sie automatisch mit. Das Plugin hatte dann eine eigene Saltcorn-Kopie ohne registrierte Feldtypen. Ab 0.1.1 stehen sie unter `devDependencies`, die Saltcorn bei der Installation entfernt.
+
+Abhilfe: Version 0.1.1 oder neuer installieren. Bleibt der Fehler, das Modul entfernen, unter **Module** auf „Clean modules and restart“ klicken und das Modul neu hinzufügen. Bei lokaler Installation darf im Quellordner kein `node_modules` liegen.
 
 ## 3. Beispiel: Zertifizierungsfälle
 
@@ -95,9 +109,11 @@ Tabelle `faelle` mit den Feldern `fallnummer` (String), `oc_pfad` (String) und o
 `test/` enthält einen ownCloud-Nachbau (WebDAV + OCS) und 26 Tests für den Client, die Routen (Rechte, Path-Traversal, Upload, Download-Streaming, Links) und die Aktionen:
 
 ```bash
-npm install --no-save @saltcorn/data @saltcorn/markup
-npm test
+npm install          # installiert auch die devDependencies @saltcorn/data und @saltcorn/markup
+npm test             # Port des Mock-Servers über OC_TEST_PORT änderbar (Standard 18180)
 ```
+
+Zusätzlich wurde Version 0.1.1 in einer echten Saltcorn-1.6.2-Instanz (SQLite) geprüft: Plugin-Konfiguration, View-Konfiguration, alle Routen per HTTP, Insert/Update-Trigger mit beiden Aktionen sowie die Bedienung im Browser.
 
 ## Dateien
 
@@ -106,5 +122,7 @@ saltcorn-owncloud/
 ├── index.js            Plugin: Konfiguration, View-Typ, Routen, Aktionen, Browser-Skript
 ├── lib/owncloud.js     WebDAV/OCS-Client (PROPFIND, MKCOL, PUT, GET, DELETE, MOVE, Shares)
 ├── package.json
+├── CHANGELOG.md
+├── LICENSE
 └── test/               Mock-Server + Tests
 ```
