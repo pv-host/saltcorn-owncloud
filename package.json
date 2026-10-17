@@ -1,10 +1,12 @@
 {
   "name": "saltcorn-owncloud",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Saltcorn-Plugin: ownCloud 10.x Dateien per WebDAV je Datensatz anzeigen, hochladen, teilen",
   "main": "index.js",
   "license": "MIT",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "fast-xml-parser": "^5.2.0"
   },
@@ -14,5 +16,26 @@
   },
   "scripts": {
     "test": "node test/run-tests.js"
+  },
+  "author": "Peter Vassen",
+  "keywords": [
+    "saltcorn",
+    "saltcorn-plugin",
+    "owncloud",
+    "webdav"
+  ],
+  "files": [
+    "index.js",
+    "lib/",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pv-host/saltcorn-owncloud.git"
+  },
+  "homepage": "https://github.com/pv-host/saltcorn-owncloud#readme",
+  "bugs": {
+    "url": "https://github.com/pv-host/saltcorn-owncloud/issues"
   }
 }

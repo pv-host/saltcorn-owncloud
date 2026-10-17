@@ -271,7 +271,7 @@ const makeViewTemplate = (pluginCfg) => {
         div({ class: "oc-msg" }),
         div({ class: "table-responsive" },
           `<table class="table table-sm table-hover align-middle mb-0">
-             <thead><tr><th>Name</th><th class="text-end">Größe</th><th>Geändert</th><th class="text-end"></th></tr></thead>
+             <thead><tr><th>Name</th><th class="text-end">Größe</th><th class="d-none d-md-table-cell">Geändert</th><th class="text-end"></th></tr></thead>
              <tbody class="oc-body"><tr><td colspan="4" class="text-muted">Lade …</td></tr></tbody>
            </table>`)
       ) + script(domReady(clientScript(opts)))
@@ -441,7 +441,7 @@ function clientScript(o) {
         if (!it.is_dir) act += '<button class="btn btn-sm btn-link oc-dl" data-path="'+esc(p)+'" title="Herunterladen"><i class="fas fa-download"></i></button>';
         if (O.share) act += '<button class="btn btn-sm btn-link oc-share" data-path="'+esc(p)+'" title="Öffentlicher Link"><i class="fas fa-link"></i></button>';
         if (O.del) act += '<button class="btn btn-sm btn-link text-danger oc-del" data-path="'+esc(p)+'" data-name="'+esc(it.name)+'" title="Löschen"><i class="fas fa-trash-alt"></i></button>';
-        return '<tr><td><i class="fas '+icon+' me-2"></i>'+name+'</td><td class="text-end text-nowrap">'+(it.is_dir?"":fmtSize(it.size))+'</td><td class="text-nowrap">'+fmtDate(it.last_modified)+'</td><td class="text-end text-nowrap">'+act+'</td></tr>';
+        return '<tr><td><i class="fas '+icon+' me-2"></i>'+name+'</td><td class="text-end text-nowrap">'+(it.is_dir?"":fmtSize(it.size))+'</td><td class="text-nowrap d-none d-md-table-cell">'+fmtDate(it.last_modified)+'</td><td class="text-end text-nowrap">'+act+'</td></tr>';
       });
       $(".oc-body").innerHTML = rows.length ? rows.join("") : '<tr><td colspan="4" class="text-muted">Ordner ist leer</td></tr>';
     });
